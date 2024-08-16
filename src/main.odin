@@ -14,6 +14,7 @@ GameScreen :: enum {
 
 main :: proc() {
     rl.InitWindow(screen_width, screen_height, "Breaker")
+    defer rl.CloseWindow()
 
     current_screen := GameScreen.Logo
 
@@ -61,6 +62,4 @@ main :: proc() {
 
         rl.EndDrawing()
     }
-
-    rl.CloseWindow()
 }
