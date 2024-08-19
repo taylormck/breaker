@@ -69,6 +69,8 @@ main :: proc() {
                 rl.BLUE,
             )
 
+            rl.DrawCircleV(ball_position, f32(ball_radius), rl.RED)
+
         case GameScreen.Ending:
             rl.DrawRectangle(0, 0, screen_width, screen_height, rl.BLUE)
             rl.DrawText("Ending Screen", 20, 20, 40, rl.DARKBLUE)
