@@ -40,6 +40,7 @@ main :: proc() {
             }
 
             update_player(delta)
+            update_ball(delta)
         case GameScreen.Ending:
             if rl.IsKeyPressed(.ENTER) {
                 current_screen = GameScreen.Title
@@ -69,7 +70,7 @@ main :: proc() {
                 rl.BLUE,
             )
 
-            rl.DrawCircleV(ball_position, f32(ball_radius), rl.RED)
+            rl.DrawCircleV(ball_position, ball_radius, rl.RED)
 
         case GameScreen.Ending:
             rl.DrawRectangle(0, 0, screen_width, screen_height, rl.BLUE)
