@@ -13,13 +13,14 @@ GameScreen :: enum {
     Ending,
 }
 
+current_screen := GameScreen.Logo
+
 main :: proc() {
     rl.InitWindow(screen_width, screen_height, "Breaker")
     defer rl.CloseWindow()
 
     rl.HideCursor()
 
-    current_screen := GameScreen.Logo
     delta: f32
 
     for !rl.WindowShouldClose() {
@@ -32,6 +33,8 @@ main :: proc() {
             }
         case GameScreen.Title:
             if rl.IsKeyPressed(.ENTER) {
+                reset_ball()
+                reset_player()
                 current_screen = GameScreen.Gameplay
             }
         case GameScreen.Gameplay:

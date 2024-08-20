@@ -34,3 +34,7 @@ update_player :: proc(delta: f32) {
         f32(screen_width - half_player_width),
     )
 }
+
+reset_player :: proc() {
+    player_position_x = screen_width / 2
+}
