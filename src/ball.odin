@@ -1,5 +1,7 @@
 package main
 
+import "core:fmt"
+import "core:math"
 import rl "vendor:raylib"
 
 base_ball_width :: 10
@@ -23,7 +25,7 @@ ball := Ball {
     speed     = ball_speed,
 }
 
-update_ball :: proc(delta: f32) {
+update_ball :: proc(ball: ^Ball, delta: f32) {
     // Bounce off the walls
     if ball.center.x < ball.radius {
         ball.direction.x = abs(ball.direction.x)
@@ -48,10 +50,13 @@ update_ball :: proc(delta: f32) {
 
 
     // Respond to collision with the paddle
-    collided := handle_ball_aabb_collision(&ball, &rect)
+    collided := handle_ball_aabb_collision(ball, &rect)
 
     // Always make the ball go up after hitting the paddle
     if collided {
+        // TODO: add some of the paddle's horizontal speed to the paddle
+
+        ball.direction.x = math.copy_sign(ball.direction.x, player_speed)
         ball.direction.y = -abs(ball.direction.y)
     }
 
@@ -67,7 +72,7 @@ update_ball :: proc(delta: f32) {
             brick_dimensions.y,
         }
 
-        collided = handle_ball_aabb_collision(&ball, &rect)
+        collided = handle_ball_aabb_collision(ball, &rect)
 
         if collided {
             brick.position = {-1, -1}
@@ -79,18 +84,22 @@ update_ball :: proc(delta: f32) {
 }
 
 handle_ball_aabb_collision :: proc(ball: ^Ball, rect: ^rl.Rectangle) -> bool {
-    collided, direction := test_circle_aabb_collision(ball, rect)
+    collided, direction, difference := test_circle_aabb_collision(ball, rect)
 
     if collided {
         switch direction {
         case .Up:
             ball.direction.y = -abs(ball.direction.y)
+            ball.center.y -= ball.radius - abs(difference.y)
         case .Down:
             ball.direction.y = abs(ball.direction.y)
+            ball.center.y += ball.radius - abs(difference.y)
         case .Left:
             ball.direction.x = abs(ball.direction.x)
+            ball.center.x += ball.radius - abs(difference.x)
         case .Right:
             ball.direction.x = -abs(ball.direction.x)
+            ball.center.x -= ball.radius - abs(difference.x)
         }
     }
 

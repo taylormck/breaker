@@ -22,26 +22,27 @@ test_circle_aabb_collision :: proc(
 ) -> (
     bool,
     Direction,
+    [2]f32,
 ) {
     aabb_dimensions: [2]f32 = {rect.width, rect.height}
     aabb_half_dimensions := aabb_dimensions / 2
     aabb_center: [2]f32 = {rect.x, rect.y} + aabb_half_dimensions
-    diff := ball.center - aabb_center
+    circle_center_to_aabb_center := ball.center - aabb_center
 
     clamped := rl.Vector2Clamp(
-        diff,
+        circle_center_to_aabb_center,
         -half_brick_dimensions,
         half_brick_dimensions,
     )
 
     closest_point := aabb_center + clamped
-    circle_center_to_closest_point := closest_point - ball.center
-    distance_squared := rl.Vector2LengthSqr(circle_center_to_closest_point)
+    difference := closest_point - ball.center
+    distance_squared := rl.Vector2LengthSqr(difference)
 
     is_collision := distance_squared <= ball.radius * ball.radius
-    collision_direction := vector_direction(circle_center_to_closest_point)
+    collision_direction := vector_direction(difference)
 
-    return is_collision, collision_direction
+    return is_collision, collision_direction, difference
 }
 
 vector_direction :: proc(vector: [2]f32) -> Direction {

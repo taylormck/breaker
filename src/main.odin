@@ -45,7 +45,7 @@ main :: proc() {
             }
 
             update_player(delta)
-            update_ball(delta)
+            update_ball(&ball, delta)
         case GameScreen.Ending:
             if rl.IsKeyPressed(.ENTER) {
                 current_screen = GameScreen.Title
