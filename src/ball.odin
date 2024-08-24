@@ -43,6 +43,21 @@ is_contacting_paddle :: proc() -> bool {
     )
 }
 
+is_contacting_brick :: proc(brick: ^Brick) -> bool {
+    // TODO: this only detects if there's any overlap between the ball and
+    // the brick, but doesn't tell us what direction the ball was going or
+    // which plane was hit.
+    return(
+        ball_position.x + ball_radius >= brick.position.x &&
+        ball_position.x - ball_radius <=
+            brick.position.x + brick_dimensions.x &&
+        ball_position.y - ball_radius >= brick.position.y &&
+        ball_position.y + ball_radius <=
+            brick.position.y + brick_dimensions.y \
+    )
+
+}
+
 reset_ball :: proc() {
     ball_position = {screen_width / 2, screen_height - 50}
     ball_direction = {1, -1}

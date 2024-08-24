@@ -46,6 +46,12 @@ main :: proc() {
 
             update_player(delta)
             update_ball(delta)
+
+            for &brick in bricks {
+                if is_contacting_brick(&brick) {
+                    brick.position = {-1, -1}
+                }
+            }
         case GameScreen.Ending:
             if rl.IsKeyPressed(.ENTER) {
                 current_screen = GameScreen.Title
@@ -81,7 +87,6 @@ main :: proc() {
                         i32(brick_dimensions.y),
                         rl.BLACK,
                     )
-
                 }
             }
 
