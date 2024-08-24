@@ -1,6 +1,5 @@
 package main
 
-import "core:fmt"
 import rl "vendor:raylib"
 
 base_ball_width :: 10
@@ -26,9 +25,11 @@ ball := Ball {
 
 update_ball :: proc(delta: f32) {
     // Bounce off the walls and ceiling
-    if ball.center.x < ball.radius ||
-       ball.center.x > screen_width - ball.radius {
-        ball.direction.x = -ball.direction.x
+    if ball.center.x < ball.radius {
+        ball.direction.x = abs(ball.direction.x)
+    }
+    if ball.center.x > screen_width - ball.radius {
+        ball.direction.x = -abs(ball.direction.x)
     }
 
     if ball.center.y <= ball.radius {
@@ -37,12 +38,11 @@ update_ball :: proc(delta: f32) {
 
     player_center: [2]f32 = {
         player_position_x - f32(half_player_width),
-        f32(screen_height) - f32(player_height),
+        f32(screen_height) - f32(player_height) / 2,
     }
     player_dimensions: [2]f32 = {f32(player_width), f32(player_height)}
 
     if test_circle_aabb_collision(&ball, player_center, player_dimensions) {
-        fmt.println("paddle hit the ball")
         ball.direction.y = -abs(ball.direction.y)
     } else if ball.center.y > screen_height - ball.radius {
         current_screen = GameScreen.Ending

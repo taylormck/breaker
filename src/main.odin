@@ -61,7 +61,8 @@ main :: proc() {
                        brick.position.y + brick_dimensions.y {
                         ball_direction.x = -ball_direction.x
                     }
-                    ball_direction.y = -ball_direction.y
+
+                    ball.direction.y = abs(ball.direction.y)
 
                     brick.position = {-1, -1}
                 }
