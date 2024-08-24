@@ -24,31 +24,77 @@ ball := Ball {
 }
 
 update_ball :: proc(delta: f32) {
-    // Bounce off the walls and ceiling
+    // Bounce off the walls
     if ball.center.x < ball.radius {
         ball.direction.x = abs(ball.direction.x)
-    }
-    if ball.center.x > screen_width - ball.radius {
+    } else if ball.center.x > screen_width - ball.radius {
         ball.direction.x = -abs(ball.direction.x)
     }
 
+    // Bounce off the ceiling
     if ball.center.y <= ball.radius {
         ball.direction.y = abs(ball.direction.y)
-    }
-
-    player_center: [2]f32 = {
-        player_position_x - f32(half_player_width),
-        f32(screen_height) - f32(player_height) / 2,
-    }
-    player_dimensions: [2]f32 = {f32(player_width), f32(player_height)}
-
-    if test_circle_aabb_collision(&ball, player_center, player_dimensions) {
-        ball.direction.y = -abs(ball.direction.y)
     } else if ball.center.y > screen_height - ball.radius {
+        // Game over if we hit the bottom of the screen
         current_screen = GameScreen.Ending
     }
 
+    rect := rl.Rectangle {
+        x      = player_position_x - f32(half_player_width),
+        y      = f32(screen_height) - f32(player_height) / 2,
+        width  = f32(player_width),
+        height = f32(player_height),
+    }
+
+
+    // Respond to collision with the paddle
+    collided := handle_ball_aabb_collision(&ball, &rect)
+
+    // Always make the ball go up after hitting the paddle
+    if collided {
+        ball.direction.y = -abs(ball.direction.y)
+    }
+
+    for &brick in bricks {
+        if brick.position.x < 0 || brick.position.y < 0 {
+            continue
+        }
+
+        rect = rl.Rectangle {
+            brick.position.x,
+            brick.position.y,
+            brick_dimensions.x,
+            brick_dimensions.y,
+        }
+
+        collided = handle_ball_aabb_collision(&ball, &rect)
+
+        if collided {
+            brick.position = {-1, -1}
+        }
+    }
+
+    // Update the ball position
     ball.center += rl.Vector2Normalize(ball.direction) * ball.speed * delta
+}
+
+handle_ball_aabb_collision :: proc(ball: ^Ball, rect: ^rl.Rectangle) -> bool {
+    collided, direction := test_circle_aabb_collision(ball, rect)
+
+    if collided {
+        switch direction {
+        case .Up:
+            ball.direction.y = -abs(ball.direction.y)
+        case .Down:
+            ball.direction.y = abs(ball.direction.y)
+        case .Left:
+            ball.direction.x = abs(ball.direction.x)
+        case .Right:
+            ball.direction.x = -abs(ball.direction.x)
+        }
+    }
+
+    return collided
 }
 
 reset_ball :: proc() {

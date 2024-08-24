@@ -46,27 +46,6 @@ main :: proc() {
 
             update_player(delta)
             update_ball(delta)
-
-            for &brick in bricks {
-                if brick.position.x >= 0 &&
-                   brick.position.y >= 0 &&
-                   test_circle_aabb_collision(
-                       &ball,
-                       brick.position,
-                       brick_dimensions,
-                   ) {
-                    // Reverse the ball's x direction if we hit the
-                    // side of the brick.
-                    if ball_position.y >=
-                       brick.position.y + brick_dimensions.y {
-                        ball_direction.x = -ball_direction.x
-                    }
-
-                    ball.direction.y = abs(ball.direction.y)
-
-                    brick.position = {-1, -1}
-                }
-            }
         case GameScreen.Ending:
             if rl.IsKeyPressed(.ENTER) {
                 current_screen = GameScreen.Title
