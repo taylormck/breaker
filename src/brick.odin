@@ -3,6 +3,7 @@ package main
 import "core:fmt"
 
 brick_dimensions: [2]f32 : {100, 40}
+half_brick_dimensions: [2]f32 = brick_dimensions / 2
 
 Brick :: struct {
     position: [2]f32,
@@ -16,6 +17,7 @@ reset_bricks :: proc() {
     }
 }
 
+// TODO: create a separate system for initializing levels
 setup_level_01 :: proc() {
     for row in 0 ..< 4 {
         for col in 0 ..< 8 {

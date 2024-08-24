@@ -9,56 +9,49 @@ ball_radius: f32 = base_ball_width
 ball_direction: [2]f32 = {1, -1}
 ball_speed: f32 = 300
 
+Ball :: struct {
+    center:    [2]f32,
+    radius:    f32,
+    direction: [2]f32,
+    speed:     f32,
+}
+
+// TODO: create a pool of balls to use instead
+ball := Ball {
+    center    = ball_position,
+    radius    = ball_radius,
+    direction = ball_direction,
+    speed     = ball_speed,
+}
+
 update_ball :: proc(delta: f32) {
     // Bounce off the walls and ceiling
-    if ball_position.x < ball_radius ||
-       ball_position.x > screen_width - ball_radius {
-        ball_direction.x *= -1
+    if ball.center.x < ball.radius ||
+       ball.center.x > screen_width - ball.radius {
+        ball.direction.x = -ball.direction.x
     }
 
-    if ball_position.y < ball_radius {
-        ball_direction.y *= -1
+    if ball.center.y <= ball.radius {
+        ball.direction.y = abs(ball.direction.y)
     }
 
-    if is_contacting_paddle() {
-        ball_direction.y = -abs(ball_direction.y)
-    } else if ball_position.y > screen_height - ball_radius {
-        fmt.printf("game over")
+    player_center: [2]f32 = {
+        player_position_x - f32(half_player_width),
+        f32(screen_height) - f32(player_height),
+    }
+    player_dimensions: [2]f32 = {f32(player_width), f32(player_height)}
+
+    if test_circle_aabb_collision(&ball, player_center, player_dimensions) {
+        fmt.println("paddle hit the ball")
+        ball.direction.y = -abs(ball.direction.y)
+    } else if ball.center.y > screen_height - ball.radius {
         current_screen = GameScreen.Ending
     }
 
-
-    ball_position += rl.Vector2Normalize(ball_direction) * ball_speed * delta
-}
-
-is_contacting_paddle :: proc() -> bool {
-    // TODO: use a more physically accurate algorithm to detect collision
-    // with the paddle.
-    return(
-        i32(ball_position.y + ball_radius) > screen_height - player_height &&
-        i32(ball_position.x + ball_radius) >=
-            i32(player_position_x) - half_player_width &&
-        i32(ball_position.x - ball_radius) <=
-            i32(player_position_x) + half_player_width \
-    )
-}
-
-is_contacting_brick :: proc(brick: ^Brick) -> bool {
-    // TODO: this only detects if there's any overlap between the ball and
-    // the brick, but doesn't tell us what direction the ball was going or
-    // which plane was hit.
-    return(
-        ball_position.x + ball_radius >= brick.position.x &&
-        ball_position.x - ball_radius <=
-            brick.position.x + brick_dimensions.x &&
-        ball_position.y - ball_radius >= brick.position.y &&
-        ball_position.y + ball_radius <=
-            brick.position.y + brick_dimensions.y \
-    )
-
+    ball.center += rl.Vector2Normalize(ball.direction) * ball.speed * delta
 }
 
 reset_ball :: proc() {
-    ball_position = {screen_width / 2, screen_height - 50}
-    ball_direction = {1, -1}
+    ball.center = {screen_width / 2, screen_height - 50}
+    ball.direction = {1, -1}
 }

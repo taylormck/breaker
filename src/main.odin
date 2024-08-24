@@ -48,7 +48,21 @@ main :: proc() {
             update_ball(delta)
 
             for &brick in bricks {
-                if is_contacting_brick(&brick) {
+                if brick.position.x >= 0 &&
+                   brick.position.y >= 0 &&
+                   test_circle_aabb_collision(
+                       &ball,
+                       brick.position,
+                       brick_dimensions,
+                   ) {
+                    // Reverse the ball's x direction if we hit the
+                    // side of the brick.
+                    if ball_position.y >=
+                       brick.position.y + brick_dimensions.y {
+                        ball_direction.x = -ball_direction.x
+                    }
+                    ball_direction.y = -ball_direction.y
+
                     brick.position = {-1, -1}
                 }
             }
@@ -105,8 +119,8 @@ main :: proc() {
                 rl.BLACK,
             )
 
-            rl.DrawCircleV(ball_position, ball_radius, rl.RED)
-            rl.DrawCircleLinesV(ball_position, ball_radius, rl.BLACK)
+            rl.DrawCircleV(ball.center, ball.radius, rl.RED)
+            rl.DrawCircleLinesV(ball.center, ball.radius, rl.BLACK)
 
         case GameScreen.Ending:
             rl.DrawRectangle(0, 0, screen_width, screen_height, rl.BLUE)
