@@ -76,6 +76,8 @@ update_ball :: proc(ball: ^Ball, delta: f32) {
 
         if collided {
             brick.position = {-1, -1}
+            score += 1
+            fmt.println("Score: ", score)
         }
     }
 

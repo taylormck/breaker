@@ -14,6 +14,7 @@ GameScreen :: enum {
 }
 
 current_screen := GameScreen.Logo
+score := 0
 
 main :: proc() {
     rl.InitWindow(screen_width, screen_height, "Breaker")
@@ -35,6 +36,7 @@ main :: proc() {
             if rl.IsKeyPressed(.ENTER) {
                 reset_ball()
                 reset_player()
+                score = 0
                 current_screen = GameScreen.Gameplay
                 reset_bricks()
                 setup_level_01()
