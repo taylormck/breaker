@@ -4,12 +4,6 @@ import "core:fmt"
 import "core:math"
 import rl "vendor:raylib"
 
-base_ball_width :: 10
-ball_position: [2]f32 = {screen_width / 2, screen_height - 50}
-ball_radius: f32 = base_ball_width
-ball_direction: [2]f32 = {1, -1}
-ball_speed: f32 = 300
-
 Ball :: struct {
     center:    [2]f32,
     radius:    f32,
@@ -17,15 +11,13 @@ Ball :: struct {
     speed:     f32,
 }
 
-// TODO: create a pool of balls to use instead
-ball := Ball {
-    center    = ball_position,
-    radius    = ball_radius,
-    direction = ball_direction,
-    speed     = ball_speed,
-}
+balls: [10]Ball
 
 update_ball :: proc(ball: ^Ball, delta: f32) {
+    if ball.radius < 0 {
+        return
+    }
+
     // Bounce off the walls
     if ball.center.x < ball.radius {
         ball.direction.x = abs(ball.direction.x)
@@ -37,8 +29,8 @@ update_ball :: proc(ball: ^Ball, delta: f32) {
     if ball.center.y <= ball.radius {
         ball.direction.y = abs(ball.direction.y)
     } else if ball.center.y > screen_height - ball.radius {
-        // Game over if we hit the bottom of the screen
-        current_screen = GameScreen.Ending
+        ball.radius = -1
+        ball.center = {-1, -1}
     }
 
     rect := rl.Rectangle {
@@ -108,7 +100,12 @@ handle_ball_aabb_collision :: proc(ball: ^Ball, rect: ^rl.Rectangle) -> bool {
     return collided
 }
 
-reset_ball :: proc() {
-    ball.center = {screen_width / 2, screen_height - 50}
-    ball.direction = {1, -1}
+count_active_balls :: proc() -> int {
+    count := 0
+    for ball in balls {
+        if ball.radius > 0 {
+            count += 1
+        }
+    }
+    return count
 }

@@ -34,7 +34,6 @@ main :: proc() {
             }
         case GameScreen.Title:
             if rl.IsKeyPressed(.ENTER) {
-                reset_ball()
                 reset_player()
                 score = 0
                 current_screen = GameScreen.Gameplay
@@ -47,7 +46,14 @@ main :: proc() {
             }
 
             update_player(delta)
-            update_ball(&ball, delta)
+
+            for &ball in balls {
+                update_ball(&ball, delta)
+            }
+
+            if count_active_balls() <= 0 {
+                current_screen = GameScreen.Ending
+            }
         case GameScreen.Ending:
             if rl.IsKeyPressed(.ENTER) {
                 current_screen = GameScreen.Title
@@ -101,8 +107,13 @@ main :: proc() {
                 rl.BLACK,
             )
 
-            rl.DrawCircleV(ball.center, ball.radius, rl.RED)
-            rl.DrawCircleLinesV(ball.center, ball.radius, rl.BLACK)
+            for ball in balls {
+                if ball.radius > 0 {
+                    rl.DrawCircleV(ball.center, ball.radius, rl.RED)
+                    rl.DrawCircleLinesV(ball.center, ball.radius, rl.BLACK)
+                }
+            }
+
 
         case GameScreen.Ending:
             rl.DrawRectangle(0, 0, screen_width, screen_height, rl.BLUE)
