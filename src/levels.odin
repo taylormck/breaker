@@ -21,8 +21,12 @@ setup_level_01 :: proc() {
         speed     = 350,
     }
 
-    balls[0].center = {screen_width / 2, screen_height - 50}
-    balls[0].direction = {1, -1}
+    balls[2] = Ball {
+        center    = {screen_width - 30, screen_height - 30},
+        radius    = 10,
+        direction = {1, -2},
+        speed     = 200,
+    }
 
     for row in 0 ..< 4 {
         for col in 0 ..< 8 {
