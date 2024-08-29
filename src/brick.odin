@@ -16,3 +16,13 @@ reset_bricks :: proc() {
         brick.position = {-1, -1}
     }
 }
+
+count_active_bricks :: proc() -> int {
+    count := 0
+    for &brick in bricks {
+        if brick.position.x > 0 {
+            count += 1
+        }
+    }
+    return count
+}

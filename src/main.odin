@@ -53,6 +53,12 @@ main :: proc() {
 
             if count_active_balls() <= 0 {
                 current_screen = GameScreen.Ending
+                fmt.println("GAME OVER")
+            }
+
+            if count_active_bricks() <= 0 {
+                current_screen = GameScreen.Ending
+                fmt.println("YOU WIN")
             }
         case GameScreen.Ending:
             if rl.IsKeyPressed(.ENTER) {
