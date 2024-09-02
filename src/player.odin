@@ -8,7 +8,7 @@ player_width: i32 = base_paddle_width
 half_player_width: i32 = player_width / 2
 player_height: i32 = 20
 player_speed: f32 = 0
-max_player_speed: f32 = 450
+max_player_speed: f32 = 475
 player_acceleration: f32 = 10
 paddle_transfer_rate :: 0.5
 
