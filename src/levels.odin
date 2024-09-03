@@ -28,6 +28,13 @@ setup_level_01 :: proc() {
         speed     = 200,
     }
 
+    balls[3] = Ball {
+        center    = {screen_width - 30, screen_height - 30},
+        radius    = 10,
+        direction = {1, -2},
+        speed     = 200,
+    }
+
     for row in 0 ..< 4 {
         for col in 0 ..< 8 {
             bricks[row * 8 + col].position = {
