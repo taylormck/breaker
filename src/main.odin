@@ -14,7 +14,7 @@ GameScreen :: enum {
 }
 
 current_screen := GameScreen.Logo
-current_level := 1
+current_level: uint = 1
 score := 0
 
 main :: proc() {
@@ -38,9 +38,8 @@ main :: proc() {
                 reset_player()
                 score = 0
                 current_screen = GameScreen.Gameplay
-                reset_bricks()
-                setup_level_01()
-                current_level = 1
+                current_level = 0
+                setup_level(current_level)
             }
         case GameScreen.Gameplay:
             if rl.IsKeyPressed(.ENTER) {
@@ -59,13 +58,13 @@ main :: proc() {
             }
 
             if count_active_bricks() <= 0 {
-                if current_level == 1 {
-                    current_level = 2
-                    setup_level_02()
-                    fmt.println("Level 1 complete!")
-                } else {
+                current_level += 1
+                if current_level > len(levels) {
                     current_screen = GameScreen.Ending
                     fmt.println("YOU WIN")
+                } else {
+                    setup_level(current_level)
+                    fmt.printfln("Level {} complete!", current_level)
                 }
             }
         case GameScreen.Ending:
