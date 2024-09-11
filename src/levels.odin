@@ -92,7 +92,7 @@ levels: [3]Level = {
                 center = {screen_width - 30, screen_height - 30},
                 radius = 10,
                 direction = {1, -2},
-                speed = 200,
+                speed = 250,
             },
         },
         num_balls = 2,
