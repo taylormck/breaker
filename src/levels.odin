@@ -95,7 +95,7 @@ levels: [3]Level = {
                 speed = 250,
             },
         },
-        num_balls = 2,
+        num_balls = 3,
         brick_rows = 6,
     },
 }
