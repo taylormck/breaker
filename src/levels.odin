@@ -31,7 +31,7 @@ setup_level :: proc(level_number: uint) {
     }
 }
 
-levels: [3]Level = {
+levels: []Level = {
     {
         balls = {
             Ball {
@@ -97,5 +97,17 @@ levels: [3]Level = {
         },
         num_balls = 3,
         brick_rows = 6,
+    },
+    {
+        balls = {
+            Ball {
+                center = {20, screen_height - 50},
+                radius = 10,
+                direction = {1, -1},
+                speed = 300,
+            },
+        },
+        num_balls = 1,
+        brick_rows = 5,
     },
 }
