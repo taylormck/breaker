@@ -104,7 +104,7 @@ levels: []Level = {
                 center = {20, screen_height - 50},
                 radius = 10,
                 direction = {1, -1},
-                speed = 300,
+                speed = 350,
             },
         },
         num_balls = 1,
