@@ -59,7 +59,7 @@ main :: proc() {
 
             if count_active_bricks() <= 0 {
                 current_level += 1
-                if current_level > len(levels) {
+                if current_level >= len(levels) {
                     current_screen = GameScreen.Ending
                     fmt.println("YOU WIN")
                 } else {
