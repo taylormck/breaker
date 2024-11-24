@@ -10,6 +10,7 @@ GameScreen :: enum {
     Logo = 0,
     Title,
     Gameplay,
+    NextLevel,
     Ending,
 }
 
@@ -29,21 +30,21 @@ main :: proc() {
         delta = rl.GetFrameTime()
 
         switch current_screen {
-        case GameScreen.Logo:
+        case .Logo:
             if rl.GetTime() > 3 || rl.IsKeyPressed(.ENTER) {
-                current_screen = GameScreen.Title
+                current_screen = .Title
             }
-        case GameScreen.Title:
+        case .Title:
             if rl.IsKeyPressed(.ENTER) {
                 reset_player()
                 score = 0
-                current_screen = GameScreen.Gameplay
+                current_screen = .Gameplay
                 current_level = 0
                 setup_level(current_level)
             }
-        case GameScreen.Gameplay:
+        case .Gameplay:
             if rl.IsKeyPressed(.ENTER) {
-                current_screen = GameScreen.Ending
+                current_screen = .Ending
             }
 
             update_player(delta)
@@ -53,23 +54,28 @@ main :: proc() {
             }
 
             if count_active_balls() <= 0 {
-                current_screen = GameScreen.Ending
+                current_screen = .Ending
                 fmt.println("GAME OVER")
             }
 
             if count_active_bricks() <= 0 {
                 current_level += 1
                 if current_level >= len(levels) {
-                    current_screen = GameScreen.Ending
+                    current_screen = .Ending
                     fmt.println("YOU WIN")
                 } else {
-                    setup_level(current_level)
+                    current_screen = .NextLevel
                     fmt.printfln("Level {} complete!", current_level)
                 }
             }
-        case GameScreen.Ending:
+        case .NextLevel:
             if rl.IsKeyPressed(.ENTER) {
-                current_screen = GameScreen.Title
+                setup_level(current_level)
+                current_screen = GameScreen.Gameplay
+            }
+        case .Ending:
+            if rl.IsKeyPressed(.ENTER) {
+                current_screen = .Title
             }
         }
 
@@ -78,14 +84,14 @@ main :: proc() {
         rl.ClearBackground(rl.RAYWHITE)
 
         switch current_screen {
-        case GameScreen.Logo:
+        case .Logo:
             rl.DrawText("LOGO SCREEN", 20, 20, 40, rl.LIGHTGRAY)
             rl.DrawText("WAIT for 3 seconds...", 290, 220, 20, rl.GRAY)
-        case GameScreen.Title:
+        case .Title:
             rl.DrawRectangle(0, 0, screen_width, screen_height, rl.GREEN)
             rl.DrawText("Title Screen", 20, 20, 40, rl.DARKGREEN)
             rl.DrawText("Press Enter to start", 120, 220, 20, rl.DARKGREEN)
-        case GameScreen.Gameplay:
+        case .Gameplay:
             rl.DrawRectangle(0, 0, screen_width, screen_height, rl.PURPLE)
 
             for brick in bricks {
@@ -127,8 +133,18 @@ main :: proc() {
                 }
             }
 
+        case .NextLevel:
+            rl.DrawRectangle(0, 0, screen_width, screen_height, rl.ORANGE)
+            rl.DrawText(
+                fmt.caprintf("Next level: {}", current_level + 1),
+                20,
+                20,
+                40,
+                rl.DARKGREEN,
+            )
+            rl.DrawText("Press Enter to start", 120, 220, 20, rl.DARKGREEN)
 
-        case GameScreen.Ending:
+        case .Ending:
             rl.DrawRectangle(0, 0, screen_width, screen_height, rl.BLUE)
             rl.DrawText("Ending Screen", 20, 20, 40, rl.DARKBLUE)
             rl.DrawText("Press Enter to retry", 120, 220, 20, rl.DARKBLUE)
