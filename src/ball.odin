@@ -46,10 +46,12 @@ update_ball :: proc(ball: ^Ball, delta: f32) {
 
     // Always make the ball go up after hitting the paddle
     if collided {
-        // TODO: add some of the paddle's horizontal speed to the paddle
-
-        ball.direction.x = math.copy_sign(ball.direction.x, player_speed)
         ball.direction.y = -abs(ball.direction.y)
+
+        if abs(player_speed) > 20 {
+            // TODO: add some of the paddle's horizontal speed to the paddle
+            ball.direction.x = math.copy_sign(ball.direction.x, player_speed)
+        }
     }
 
     for &brick in bricks {
