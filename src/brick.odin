@@ -20,7 +20,7 @@ reset_bricks :: proc() {
 count_active_bricks :: proc() -> int {
     count := 0
     for &brick in bricks {
-        if brick.position.x > 0 {
+        if brick.position.x >= 0 && brick.position.y >= 0 {
             count += 1
         }
     }
