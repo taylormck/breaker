@@ -11,13 +11,13 @@ Brick :: struct {
 
 bricks: [100]Brick
 
-reset_bricks :: proc() {
+bricks_reset :: proc() {
     for &brick in bricks {
         brick.position = {-1, -1}
     }
 }
 
-count_active_bricks :: proc() -> int {
+bricks_count_active :: proc() -> int {
     count := 0
     for &brick in bricks {
         if brick.position.x >= 0 && brick.position.y >= 0 {

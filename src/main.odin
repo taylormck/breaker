@@ -53,12 +53,12 @@ main :: proc() {
                 ball_update(&ball, delta)
             }
 
-            if ball_count_active() <= 0 {
+            if balls_count_active() <= 0 {
                 current_screen = .Ending
                 fmt.println("GAME OVER")
             }
 
-            if count_active_bricks() <= 0 {
+            if bricks_count_active() <= 0 {
                 current_level += 1
                 if current_level >= len(levels) {
                     current_screen = .Ending

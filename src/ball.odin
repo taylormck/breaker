@@ -102,7 +102,7 @@ ball_handle_aabb_collision :: proc(ball: ^Ball, rect: ^rl.Rectangle) -> bool {
     return collided
 }
 
-ball_count_active :: proc() -> int {
+balls_count_active :: proc() -> int {
     count := 0
     for ball in balls {
         if ball.radius > 0 {

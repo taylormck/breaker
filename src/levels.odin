@@ -19,7 +19,7 @@ setup_level :: proc(level_number: uint) {
         balls[i] = level.balls[i]
     }
 
-    reset_bricks()
+    bricks_reset()
 
     for row in 0 ..< level.brick_rows {
         for col in 0 ..< 8 {
