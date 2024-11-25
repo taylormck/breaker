@@ -36,7 +36,7 @@ main :: proc() {
             }
         case .Title:
             if rl.IsKeyPressed(.ENTER) {
-                reset_player()
+                player_reset()
                 score = 0
                 current_screen = .Gameplay
                 current_level = 0
@@ -47,7 +47,7 @@ main :: proc() {
                 current_screen = .Ending
             }
 
-            update_player(delta)
+            player_update(delta)
 
             for &ball in balls {
                 ball_update(&ball, delta)

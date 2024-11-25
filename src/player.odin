@@ -12,7 +12,7 @@ max_player_speed: f32 = 475
 player_acceleration: f32 = 10
 paddle_transfer_rate :: 0.5
 
-update_player :: proc(delta: f32) {
+player_update :: proc(delta: f32) {
     target_velocity: f32 = 0
 
     if rl.IsKeyDown(.LEFT) || rl.IsKeyDown(.A) {
@@ -36,6 +36,6 @@ update_player :: proc(delta: f32) {
     )
 }
 
-reset_player :: proc() {
+player_reset :: proc() {
     player_position_x = screen_width / 2
 }
