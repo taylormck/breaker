@@ -13,7 +13,7 @@ Ball :: struct {
 
 balls: [10]Ball
 
-update_ball :: proc(ball: ^Ball, delta: f32) {
+ball_update :: proc(ball: ^Ball, delta: f32) {
     if ball.radius < 0 {
         return
     }
@@ -42,7 +42,7 @@ update_ball :: proc(ball: ^Ball, delta: f32) {
 
 
     // Respond to collision with the paddle
-    collided := handle_ball_aabb_collision(ball, &rect)
+    collided := ball_handle_aabb_collision(ball, &rect)
 
     // Always make the ball go up after hitting the paddle
     if collided {
@@ -66,7 +66,7 @@ update_ball :: proc(ball: ^Ball, delta: f32) {
             brick_dimensions.y,
         }
 
-        collided = handle_ball_aabb_collision(ball, &rect)
+        collided = ball_handle_aabb_collision(ball, &rect)
 
         if collided {
             brick.position = {-1, -1}
@@ -79,7 +79,7 @@ update_ball :: proc(ball: ^Ball, delta: f32) {
     ball.center += rl.Vector2Normalize(ball.direction) * ball.speed * delta
 }
 
-handle_ball_aabb_collision :: proc(ball: ^Ball, rect: ^rl.Rectangle) -> bool {
+ball_handle_aabb_collision :: proc(ball: ^Ball, rect: ^rl.Rectangle) -> bool {
     collided, direction, difference := test_circle_aabb_collision(ball, rect)
 
     if collided {
@@ -102,7 +102,7 @@ handle_ball_aabb_collision :: proc(ball: ^Ball, rect: ^rl.Rectangle) -> bool {
     return collided
 }
 
-count_active_balls :: proc() -> int {
+ball_count_active :: proc() -> int {
     count := 0
     for ball in balls {
         if ball.radius > 0 {

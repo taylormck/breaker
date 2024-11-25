@@ -50,10 +50,10 @@ main :: proc() {
             update_player(delta)
 
             for &ball in balls {
-                update_ball(&ball, delta)
+                ball_update(&ball, delta)
             }
 
-            if count_active_balls() <= 0 {
+            if ball_count_active() <= 0 {
                 current_screen = .Ending
                 fmt.println("GAME OVER")
             }
