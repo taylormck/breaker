@@ -118,6 +118,12 @@ levels: []Level = {
                 direction = {1, -1},
                 speed = 350,
             },
+            Ball {
+                center = {40, screen_height - 60},
+                radius = 4,
+                direction = {1, -2},
+                speed = 450,
+            },
         },
         num_balls = 1,
         brick_rows = 5,
